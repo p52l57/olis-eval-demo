@@ -39,6 +39,9 @@ export class AppComponent {
 	public cmanSourceList:Legislator[] = []; //records available to add to sponsor list
 	public pendingSponsorList:Legislator[] = []; //the selected sponsor list 
 	public billErrMessage:string = ''; 
+	public validationErrorMessage:string = '';
+	public targetCman = null;
+	public targetSponsor = null;
 
   	public constructor(){
 		this.selectedTab = 'legislators';
@@ -129,7 +132,6 @@ export class AppComponent {
 
 	}
 
-	public validationErrorMessage:string = '';
 
 	public showAddDialog():void{
 		if(this.selectedTab == 'bills'){
@@ -165,17 +167,14 @@ export class AppComponent {
 			this.loading = false;
 		})
 	}
-
 	
+	//some rudimentary validation...
 	private validateCmanRecord():string{
 		if(this.selectedCman.first_name.trim() == '') return 'First name is a required field.';
 		if(this.selectedCman.last_name.trim() == '') return 'Last name is a required field.';
 		if(this.selectedCman.hometown.trim() == '') return 'Hometown is a required field.';
 		return '';
 	}
-
-	public targetCman = null;
-	public targetSponsor = null;
 
 	public commitCmanSelections():void{
 		if(this.targetCman != null){
@@ -209,7 +208,6 @@ export class AppComponent {
 		})
 
 	}
-
 
 	public addBill():void{
 		this.billErrMessage = this.validateBillForm();
