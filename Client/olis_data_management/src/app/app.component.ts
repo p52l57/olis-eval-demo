@@ -38,8 +38,8 @@ export class AppComponent {
 	public selectedBill:Legislation = new Legislation(); //bill record we are adding or editing
 	public cmanSourceList:Legislator[] = []; //records available to add to sponsor list
 	public pendingSponsorList:Legislator[] = []; //the selected sponsor list 
-	public billErrMessage:string = ''; 
-	public validationErrorMessage:string = '';
+	public billErrMessage:string[] = []; 
+	public validationErrorMessage:string[] = [];
 	public targetCman = null;
 	public targetSponsor = null;
 
@@ -146,7 +146,7 @@ export class AppComponent {
 	public addCman():void{
 		let validErr = this.validateCmanRecord();
 
-		if(validErr != '') {
+		if(validErr.length > 0) {
 			this.validationErrorMessage = validErr;
 			return;
 		}
@@ -169,11 +169,15 @@ export class AppComponent {
 	}
 	
 	//some rudimentary validation...
-	private validateCmanRecord():string{
-		if(this.selectedCman.first_name.trim() == '') return 'First name is a required field.';
-		if(this.selectedCman.last_name.trim() == '') return 'Last name is a required field.';
-		if(this.selectedCman.hometown.trim() == '') return 'Hometown is a required field.';
-		return '';
+	private validateCmanRecord():string[]{
+		let errors:string[] = [];
+		if(this.selectedCman.first_name.trim() == '') 
+			errors.push('First name is a required field.');
+		if(this.selectedCman.last_name.trim() == '') 
+			errors.push('Last name is a required field.');
+		if(this.selectedCman.hometown.trim() == '') 
+			errors.push( 'Hometown is a required field.');
+		return errors;
 	}
 
 	public commitCmanSelections(pushAll:boolean = false):void{
@@ -223,7 +227,8 @@ export class AppComponent {
 
 	public addBill():void{
 		this.billErrMessage = this.validateBillForm();
-		if(this.billErrMessage != '') return;
+		if(this.billErrMessage.length > 0 ) return;
+		
 		this.loading = true;
 
 		for(let id of this.pendingSponsorList){
@@ -249,11 +254,12 @@ export class AppComponent {
 		this.pendingSponsorList = [];
 	}
 
-	public validateBillForm():string{
-		if(this.selectedBill.title.trim() == '') return 'Title is a required field.';
-		if(this.selectedBill.text.trim() == '') return 'Text is a required field.';
+	public validateBillForm():string[]{
+		let errs:string[] = [];
+		if(this.selectedBill.title.trim() == '') errs.push( 'Title is a required field.');
+		if(this.selectedBill.text.trim() == '') errs.push( 'Text is a required field.');
 		//if(this.pendingSponsorList.length == 0) return 'Must select one or more bill sponsors.';
-		return '';
+		return errs;
 	}
   }
 

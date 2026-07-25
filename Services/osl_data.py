@@ -93,22 +93,22 @@ class data:
 		return id
 
 	#useful for testing
-	def clear_database(self):
-		conn = sqlite3.connect(self.connectionString)
+	# def clear_database(self):
+	# 	conn = sqlite3.connect(self.connectionString)
 
-		cur = conn.cursor()
-		try:
-			cur.execute("DELETE FROM Legislation_Legislator")
-			cur.execute("DELETE FROM Legislator")
-			cur.execute("DELETE FROM Legislation")
-			conn.commit()
-		except sqlite3.Error:
-			conn.rollback()
-			raise
-		finally:
-			conn.close()
-		print(id)
-		return id
+	# 	cur = conn.cursor()
+	# 	try:
+	# 		cur.execute("DELETE FROM Legislation_Legislator")
+	# 		cur.execute("DELETE FROM Legislator")
+	# 		cur.execute("DELETE FROM Legislation")
+	# 		conn.commit()
+	# 	except sqlite3.Error:
+	# 		conn.rollback()
+	# 		raise
+	# 	finally:
+	# 		conn.close()
+	# 	print(id)
+	# 	return id
 
 	def add_bill(self, bill:legislation):
 		id:int = 0
