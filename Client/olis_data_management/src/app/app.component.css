@@ -96,6 +96,18 @@ tr{
 	cursor:pointer;
 }
 
+td {
+	text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.overflower{
+	text-overflow: ellipsis;
+  	white-space: nowrap;
+	overflow: hidden;
+}
+
 tr:hover{
 	background-color:lightblue !important;
 }

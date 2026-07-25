@@ -176,7 +176,14 @@ export class AppComponent {
 		return '';
 	}
 
-	public commitCmanSelections():void{
+	public commitCmanSelections(pushAll:boolean = false):void{
+		
+		if(pushAll) {
+			this.pendingSponsorList = this.legislators;
+			this.cmanSourceList = [];
+			return;
+		}
+
 		if(this.targetCman != null){
 			if(this.pendingSponsorList.find(a=>a==this.targetCman) == undefined)
 			{
@@ -188,7 +195,12 @@ export class AppComponent {
 		}
 	}
 
-	public removeCmanSelections():void{
+	public removeCmanSelections(pushAll:boolean = false):void{
+		if(pushAll == true){
+			this.cmanSourceList = this.legislators;
+			this.pendingSponsorList = [];
+		}
+
 		if(this.targetSponsor != null){
 			if(this.cmanSourceList.find(a=>a==this.targetSponsor) == undefined){
 				this.cmanSourceList.push(this.targetSponsor);
@@ -240,7 +252,7 @@ export class AppComponent {
 	public validateBillForm():string{
 		if(this.selectedBill.title.trim() == '') return 'Title is a required field.';
 		if(this.selectedBill.text.trim() == '') return 'Text is a required field.';
-		if(this.pendingSponsorList.length == 0) return 'Must select one or more bill sponsors.';
+		//if(this.pendingSponsorList.length == 0) return 'Must select one or more bill sponsors.';
 		return '';
 	}
   }

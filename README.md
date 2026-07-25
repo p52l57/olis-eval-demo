@@ -19,9 +19,9 @@ How to setup the application:
     2) run "npm install" 
     3) to fire up the web site, run "npm start"
 
-Navigate to http://localhost:4200 
+Navigate to http://localhost:4200 to run the web application
 
-Note http as opposed to https. This is a demo application
+Note http as opposed to https. This is a demo application.
 
 Click on the Legislator tab and click the "Legislators" tab and press the "Add Legislator" button to see the dialog to add a legislator
 

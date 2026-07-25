@@ -32,8 +32,8 @@ class data:
 	#get a list of bills. There should be pagination, sorting and filtering, etc. but this is a demo
 	def get_bills(self):
 		arr:list = []
-		#assuming that in order for legislation to be valid it needs at least one sponsor
-		#TODO: clean up this query
+		#assuming that in order for legislation to be valid it needs at least one sponsor...
+
 		sql = """
 			SELECT 
 				l.ID AS bill_id,
@@ -41,17 +41,17 @@ class data:
 				ll.LegislatorID AS sponsor_id,
 				c.FirstName AS first_name,
 				c.LastName AS last_name
-			FROM Legislation_Legislator ll 
-			INNER JOIN Legislation l on ll.LegislationID = l.ID
-			INNER JOIN Legislator c ON c.ID = ll.LegislatorID
-			ORDER BY l.ID DESC
+			FROM Legislation l
+			LEFT JOIN Legislation_Legislator ll ON l.ID = ll.LegislationID
+			LEFT JOIN Legislator c on ll.LegislatorID = c.ID
+			ORDER BY l.ID DESC;
 			"""
 
 		conn = sqlite3.connect(self.connectionString)
 		conn.row_factory = sqlite3.Row #so we can use the column name as opposed to the index
 		try:
 			cur = conn.cursor()
-			cur.execute(sql) #is it obvious i'm not getting paid for this?
+			cur.execute(sql)
 			rows = cur.fetchall()
 			last_bill_id = 0
 			bill = legislation('','')
@@ -61,12 +61,15 @@ class data:
 					bill.ID = row["bill_id"]
 					last_bill_id = bill.ID
 					arr.append(bill)
-				bill.sponsors.append(row["sponsor_id"]) #just send the id list....
-				sep = '' 
-				if len(bill.sponsor_list) > 0:
-					sep = ','
-				#view model field to simplify displaying the sponsor list.
-				bill.sponsor_list +=  f"{sep} {row['first_name']} {row['last_name']}"
+				if row["sponsor_id"] != None:
+					bill.sponsors.append(row["sponsor_id"]) #just send the id list....
+					sep = '' 
+					if len(bill.sponsor_list) > 0:
+						sep = ','
+					#view model field to simplify displaying the sponsor list.
+					bill.sponsor_list +=  f"{sep} {row['first_name']} {row['last_name']}"
+				else:
+					bill.sponsor_list = "N/A"
 		finally:
 			conn.close() #explicitly cleanup the connection
 
@@ -101,6 +104,7 @@ class data:
 			conn.commit()
 		except sqlite3.Error:
 			conn.rollback()
+			raise
 		finally:
 			conn.close()
 		print(id)
@@ -119,14 +123,15 @@ class data:
 					(title, text) 
 				VALUES (?,?)""", (bill.title, bill.text))  
 			id = cur.lastrowid
-			for s in bill.sponsors: #add the sponsors...
+			for sponsor in bill.sponsors: #add the sponsors...
 				cur.execute(f"""
 				INSERT INTO 
 				Legislation_Legislator (LegislatorID, LegislationID) 
-				VALUES (?,?)""", (s, id))
+				VALUES (?,?)""", (sponsor, id))
 			conn.commit()
 		except sqlite3.Error:
 			conn.rollback()
+			raise
 		finally:
 			conn.close()
 
