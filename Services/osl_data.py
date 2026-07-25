@@ -1,14 +1,16 @@
-import sqlite3 #keeping it simple....
+import sqlite3 
 from osl_model import legislation, legislator
 
-#to make things simple for the demo we'll use sqllite, but prod quality application will use an industrial strength relational database: postgres, sql server, etc. not using here because setup is too risky and cumbersome for a demo.
+#To make things simple for the demo we'll use sqllite, but prod quality application 
+# will use an industrial strength relational database: postgres, sql server, etc. 
+# not using here because setup is too risky and cumbersome for a demo.
 
 class data:
 	def __init__(self, connectionString):
 		self.connectionString = connectionString
 
-	#get a list of congressmen. in a real application there's
-	#pagination, filter criteria, sorting, etc.
+	#get a list of congressmen. in the real application there's
+	#pagination, filter criteria, sorting, etc. but for brevity we're ignoring that...
 	def get_legislators(self):	
 		legislators:list = []
 
@@ -16,7 +18,7 @@ class data:
 		conn.row_factory = sqlite3.Row 
 		try:
 			cur = conn.cursor()
-			cur.execute('select ID, FirstName, LastName, HomeTown from Legislator')
+			cur.execute('SELECT ID, FirstName, LastName, HomeTown from Legislator')
 			rows = cur.fetchall()
 			for row in rows:
 				leg = legislator(row['FirstName'], row['LastName'], row['HomeTown'])
@@ -27,10 +29,11 @@ class data:
 
 		return legislators
 
-	#get a list of bills. There should be pagination, sorting and filtering, etc.
+	#get a list of bills. There should be pagination, sorting and filtering, etc. but this is a demo
 	def get_bills(self):
 		arr:list = []
-
+		#assuming that in order for legislation to be valid it needs at least one sponsor
+		#TODO: clean up this query
 		sql = """
 			SELECT 
 				l.ID AS bill_id,
@@ -50,22 +53,22 @@ class data:
 			cur = conn.cursor()
 			cur.execute(sql) #is it obvious i'm not getting paid for this?
 			rows = cur.fetchall()
-			id = 0
+			last_bill_id = 0
 			bill = legislation('','')
 			for row in rows:
-				if id != row["bill_id"]: #we're ready to insert a new record
+				if last_bill_id != row["bill_id"]: #we're ready to insert a new record
 					bill = legislation(row['title'], '') #for the listing ignore the text - its not displayed in the report
 					bill.ID = row["bill_id"]
-					id = bill.ID
+					last_bill_id = bill.ID
 					arr.append(bill)
-				bill.sponsors.append(row["sponsor_id"])
+				bill.sponsors.append(row["sponsor_id"]) #just send the id list....
 				sep = '' 
 				if len(bill.sponsor_list) > 0:
 					sep = ','
-				#for displaying the sponsor list in the report.
+				#view model field to simplify displaying the sponsor list.
 				bill.sponsor_list +=  f"{sep} {row['first_name']} {row['last_name']}"
 		finally:
-			conn.close()
+			conn.close() #explicitly cleanup the connection
 
 		return arr
 
@@ -73,18 +76,17 @@ class data:
 	def add_cman(self, cman:legislator):
 		id:int = 0
 		conn = sqlite3.connect(self.connectionString)
-
 		cur = conn.cursor()
 		try:
 			cur.execute(f""" 
 				INSERT INTO Legislator (FirstName, LastName, HomeTown)
-				VALUES ('{cman.first_name}', '{cman.last_name}', '{cman.hometown}')
-			""")
+				VALUES (?,?,?)""", #mitigate sql injection
+				(cman.first_name, cman.last_name, cman.hometown))
 			id = cur.lastrowid
 			conn.commit()
 		finally:
 			conn.close()
-		print(id)
+
 		return id
 
 	#useful for testing
@@ -115,15 +117,13 @@ class data:
 				INSERT INTO 
 				Legislation 
 					(title, text) 
-				VALUES ('{bill.title}', '{bill.text}');		
-				""") #TODO: guard against injection, escape ticks, etc. 
+				VALUES (?,?)""", (bill.title, bill.text))  
 			id = cur.lastrowid
-			for s in bill.sponsors:
+			for s in bill.sponsors: #add the sponsors...
 				cur.execute(f"""
 				INSERT INTO 
 				Legislation_Legislator (LegislatorID, LegislationID) 
-				VALUES ({s}, {id})
-				""")
+				VALUES (?,?)""", (s, id))
 			conn.commit()
 		except sqlite3.Error:
 			conn.rollback()
@@ -131,3 +131,7 @@ class data:
 			conn.close()
 
 		return id
+
+	#to mitigate sql injection attempts
+	def escape_quote(val:str):
+		return val.replace("'", "''")

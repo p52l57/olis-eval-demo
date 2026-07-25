@@ -19,6 +19,8 @@
 	flex-direction:column;
 	border-color:lightgray;
 	border-radius:25px;
+	border-width:1.5px;
+
 }
 
 .osl-tab {
@@ -32,6 +34,7 @@
 	border-top:solid;
 	border-left:solid;
 	border-right:solid;
+	border-width:1.5px;
 	width:150px;
 	height:50px;
 	border-color:lightgray !important;

@@ -83,16 +83,16 @@
 	@if(validationErrorMessage == ''){
 	<div style="margin-top:10px;">
 		<span>First Name:&nbsp;</span>
-		<span><input type="text" [(ngModel)]="selectedCman.first_name" class="data-entry" /></span>
+		<span><input type="text" maxlength="128" [(ngModel)]="selectedCman.first_name" class="data-entry" /></span>
 	</div>
 	<div>
 		<span>Last Name:&nbsp;</span>
-		<span><input type="text" [(ngModel)]="selectedCman.last_name" class="data-entry" /></span>
+		<span><input type="text" maxlength="128" [(ngModel)]="selectedCman.last_name" class="data-entry" /></span>
 	</div>
 	<div>
 		<span>Hometown:&nbsp;</span>
 		<span>
-			<input type="text" [(ngModel)]="selectedCman.hometown" class="data-entry" />
+			<input type="text" maxlength="128" [(ngModel)]="selectedCman.hometown" class="data-entry" />
 		</span>
 	</div>
 	<div style="display:flex;flex-direction:row;">
@@ -113,7 +113,7 @@
 @if(billErrMessage == ''){
 	<div>
 		<span>Title:&nbsp;</span>
-		<span><input type="text" style="width:440px !important" [(ngModel)]="selectedBill.title" class="data-entry" /></span>
+		<span><input type="text" maxlength="512" style="width:440px !important" [(ngModel)]="selectedBill.title" class="data-entry" /></span>
 	</div>
 	<div class="bill-text" style="margin-top:10px;">
 		<!-- TODO: this really needs to be an html editor, right? -->
