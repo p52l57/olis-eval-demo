@@ -1,3 +1,6 @@
+
+Watch the movie called OLIS_EVAL_DEMO.mov for a silent walkthrough of how this works.
+
 Assumptions: 
 
     1) Python3 is installed and in the path
