@@ -22,13 +22,13 @@ How to setup the application:
     2) run "npm install" 
     3) to fire up the web site, run "npm start"
 
-Navigate your browser to http://localhost:4200 to run the web application. Note http as opposed to https. This is a demo application.
+Navigate your browser to http://localhost:4200 to run the web application. 
 
 Click on the Legislator tab and click the "Legislators" tab and press the "Add Legislator" button to see the dialog to add a legislator.
 
-Note the legislator report with rudimentary filter 
+Note the legislator report with rudimentary filter.
 
-Click on the "Bills" table and click the "Add Bill" button to add a bill 
+Click on the "Bills" table and click the "Add Bill" button to add a bill.
 
 Note the bills report.
 

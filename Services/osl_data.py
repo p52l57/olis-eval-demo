@@ -3,8 +3,9 @@ from osl_model import legislation, legislator
 
 #To make things simple for the demo we'll use sqllite, but prod quality application 
 # will use an industrial strength relational database: postgres, sql server, etc. 
-# not using here because setup is too risky and cumbersome for a demo.
+# not using here because there are too many points of failure and this is a demp.
 
+#how does connection pooling work in sqlite3?
 class data:
 	def __init__(self, connectionString):
 		self.connectionString = connectionString
@@ -66,7 +67,8 @@ class data:
 					sep = '' 
 					if len(bill.sponsor_list) > 0:
 						sep = ','
-					#view model field to simplify displaying the sponsor list.
+					#field to simplify displaying the sponsor list.
+					#does python have a buffered string builder?
 					bill.sponsor_list +=  f"{sep} {row['first_name']} {row['last_name']}"
 				else:
 					bill.sponsor_list = "N/A"
@@ -83,7 +85,7 @@ class data:
 		try:
 			cur.execute(f""" 
 				INSERT INTO Legislator (FirstName, LastName, HomeTown)
-				VALUES (?,?,?)""", #mitigate sql injection
+				VALUES (?,?,?)""", #mitigate sql injection with paramteriszed strings
 				(cman.first_name, cman.last_name, cman.hometown))
 			id = cur.lastrowid
 			conn.commit()
@@ -136,7 +138,3 @@ class data:
 			conn.close()
 
 		return id
-
-	#to mitigate sql injection attempts
-	def escape_quote(val:str):
-		return val.replace("'", "''")
