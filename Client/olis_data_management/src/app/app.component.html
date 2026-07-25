@@ -73,7 +73,7 @@
 <div class="modal-wall" *ngIf="showErrorDialog">
 <div class="popup error-dialog" >
 	<div>An error happened while attempting to complete this operation:</div>
-	<div>{{errorMessage}}</div>
+	<div style="color:red"><b>{{errorMessage}}</b></div>
 	<div class="button" (click)="showErrorDialog = false">OK</div>
 </div>
 </div>
