@@ -33,9 +33,11 @@
 					<tbody>
 						<tr *ngFor="let bill of filteredBills; index as i" [ngClass]="{'tr-hilight' : i % 2 == 0}">
 							<td>&nbsp;{{bill.ID}}</td>
-							<td class="overflower">{{bill.title}}</td>
-							<td style="width:600px" class="overflower">
-								<span class="overflower" style="width:600px;display:inline-block">{{bill.sponsor_list}}</span>
+							<td>
+								<span class="overflower" style="display:inline-block;width:450px;" title="{{bill.title}}">{{bill.title}}</span> 
+							</td>
+							<td style="width:640px" class="overflower">
+								<span class="overflower" style="width:640px;display:inline-block" title="{{bill.sponsor_list}}">{{bill.sponsor_list}}</span>
 							</td>
 						</tr>
 					</tbody>
