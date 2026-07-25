@@ -126,9 +126,9 @@
 		<span>Bill Text:&nbsp;</span>
 		<span><textarea type="text" [(ngModel)]="selectedBill.text" class="text-entry"></textarea></span>
 	</div>
-	<div style="width:100%;text-align:center">Sponsors:</div>
 	<div class="cman-selector">
 		<div>
+			<div style="margin-bottom:10px">Legislators:</div>
 			<select size="8" [(ngModel)]="targetCman">
 				<option #cman *ngFor="let cman of cmanSourceList" [ngValue]="cman">
 					{{cman.first_name}}&nbsp;{{cman.last_name}}
@@ -142,7 +142,8 @@
 			<div (click)="removeCmanSelections()" class="fas fa-angle-left" title="select a sponsor and click this button to remove from the list."></div>
 			<div (click)="removeCmanSelections(true)" class="fas fa-angles-left" style="width:100%;text-align:center;" title="click here to remove all sponsors."></div>
 		</div>
-		<div>
+		<div >
+			<div style="margin-bottom:10px">Sponsors:</div>
 			<select size="8" [(ngModel)]="targetSponsor">
 				<option *ngFor="let cman of pendingSponsorList" [ngValue]="cman">
 					{{cman.first_name}}&nbsp;{{cman.last_name}}
