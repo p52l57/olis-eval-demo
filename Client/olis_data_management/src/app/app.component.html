@@ -1,0 +1,156 @@
+
+<div class="main">	
+	@if(loading){
+		<div>Loading...</div>
+	}
+<!-- TODO: else if here -->
+	@if(!loading){
+		<div class="osl-tabview">
+			<div class="tab-strip">
+				<div class="osl-tab" (click)="selectLegislatorsTab()" [style]="{'border-bottom': (selectedTab != 'legislators' ? 'solid' : 'none')}">
+					Legislators
+				</div>
+				<div class="osl-tab" (click)="selectBillsTab()" [style]="{'border-bottom': (selectedTab != 'bills' ? 'solid' : 'none')}">
+					Bills
+				</div>
+				<div class="osl-tab-pad">
+					<input [(ngModel)]="searchTerm" spellcheck="false" class="search-entry" (input)="selectedTab == 'legislators' ? filterLegList() : filterBillsList()" placeholder="Enter a search term to filter the list..."  />
+
+					<span (click)="showAddDialog()" class="fa fa-plus" style="cursor:pointer;margin-left:20px;" title="Add a new {{getTopic()}} record"></span><span (click)="showAddDialog()" style="cursor:pointer">&nbsp;Add a {{getTopic()}}</span>
+				</div>
+			</div>
+			@if(selectedTab == 'bills'){
+			<div *ngIf="filteredBills.length == 0" class="no-results"><em>No results</em></div>
+			<div class="tab-content" *ngIf="filteredBills.length > 0">
+				<table class="cman-table">
+					<thead>
+						<tr>
+							<th style="width:5%">&nbsp;ID</th>
+							<th>Title</th>
+							<th>Sponsors</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let bill of filteredBills; index as i" [ngClass]="{'tr-hilight' : i % 2 == 0}">
+							<td>&nbsp;{{bill.ID}}</td>
+							<td>{{bill.title}}</td>
+							<td>{{bill.sponsor_list}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+			}
+			@if(selectedTab == 'legislators'){
+			<div *ngIf="filteredLegislators.length == 0" class="no-results"><em>No results</em></div>
+			<div class="tab-content" *ngIf="filteredLegislators.length > 0">
+				<table class="cman-table">
+					<thead>
+						<tr>
+							<th>&nbsp;ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Home Town</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let cman of filteredLegislators; index as i" [ngClass]="{'tr-hilight' : i % 2 == 0}">
+							<td>&nbsp;{{cman.ID}}</td>
+							<td>{{cman.first_name}}</td>
+							<td>{{cman.last_name}}</td>
+							<td>{{cman.hometown}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			}
+		</div>
+	}
+</div>
+
+<!-- dialogs -->
+ <!-- ideally these should have their own components, but to make it easy on you I've left them inline -->
+<div class="modal-wall" *ngIf="showErrorDialog">
+<div class="popup error-dialog" >
+	<div>An error happened while attempting to complete this operation:</div>
+	<div>{{errorMessage}}</div>
+	<div class="button" (click)="showErrorDialog = false">OK</div>
+</div>
+</div>
+
+<div class="modal-wall" *ngIf="showAddCManDialog">
+<div class="popup cman-dialog">
+	@if(validationErrorMessage == ''){
+	<div style="margin-top:10px;">
+		<span>First Name:&nbsp;</span>
+		<span><input type="text" [(ngModel)]="selectedCman.first_name" class="data-entry" /></span>
+	</div>
+	<div>
+		<span>Last Name:&nbsp;</span>
+		<span><input type="text" [(ngModel)]="selectedCman.last_name" class="data-entry" /></span>
+	</div>
+	<div>
+		<span>Hometown:&nbsp;</span>
+		<span>
+			<input type="text" [(ngModel)]="selectedCman.hometown" class="data-entry" />
+		</span>
+	</div>
+	<div style="display:flex;flex-direction:row;">
+		<div class="button" (click)="addCman()" style="margin:5px">Submit</div>
+		<div class="button" (click)="cancelCmanAdd()" style="margin:5px">Cancel</div>
+	</div>
+	}
+	@if(validationErrorMessage != ''){
+		<div>A Validation Error Happened:</div>
+		<div style="color:red"><b>{{validationErrorMessage}}</b></div>
+		<div class="button" (click)="validationErrorMessage = ''" style="margin:5px">OK</div>
+	}
+</div>
+</div>
+
+<div class="modal-wall" *ngIf="showAddBillDialog">
+<div class="popup bills-dialog">
+@if(billErrMessage == ''){
+	<div>
+		<span>Title:&nbsp;</span>
+		<span><input type="text" style="width:440px !important" [(ngModel)]="selectedBill.title" class="data-entry" /></span>
+	</div>
+	<div class="bill-text" style="margin-top:10px;">
+		<!-- TODO: this really needs to be an html editor, right? -->
+		<span>Bill Text:&nbsp;</span>
+		<span><textarea type="text" [(ngModel)]="selectedBill.text" class="text-entry"></textarea></span>
+	</div>
+	<div style="width:100%;text-align:center">Sponsors:</div>
+	<div class="cman-selector">
+		<div>
+			<select size="8" [(ngModel)]="targetCman">
+				<option #cman *ngFor="let cman of cmanSourceList" [ngValue]="cman">
+					{{cman.first_name}}&nbsp;{{cman.last_name}}
+				</option>
+			</select>
+		</div>
+		<div class="cman-selector-control-strip">
+			<!-- controls to move selections back and forth -->
+			<div (click)="commitCmanSelections()" class="fas fa-circle-arrow-right" style="width:100%;text-align:center;margin-bottom:10px;" title="select a legislator and click this button to add to the sponsor list."></div>
+			<div (click)="removeCmanSelections()" class="fas fa-circle-arrow-left" style="width:100%;text-align:center;" title="select a sponsor and click this button to remove from the list."></div>
+		</div>
+		<div>
+			<select size="8" [(ngModel)]="targetSponsor">
+				<option *ngFor="let cman of pendingSponsorList" [ngValue]="cman">
+					{{cman.first_name}}&nbsp;{{cman.last_name}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div style="display:flex;flex-direction:row;margin-top:15px;">
+		<div class="button" (click)="addBill()" style="margin:5px">Submit</div>
+		<div class="button" (click)="cancelBillAdd()" style="margin:5px">Cancel</div>
+	</div>
+	}
+@else{
+	<div>A validation error happened:</div>
+	<div style="margin-top:15px;margin-bottom:15px;color:red"><b>{{billErrMessage}}</b></div>
+	<div class="button" (click)="billErrMessage = ''">OK</div>
+}
+</div>
+</div>

@@ -1,0 +1,234 @@
+.main{
+	width:90%;
+	height:90%;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	font-family:'Times New Roman', Times, serif;
+}
+
+.osl-tabview{
+	height:60%;
+	width:1100px;
+	border-bottom:solid;
+	border-left:solid;
+	border-top:solid;
+	border-right:solid;
+	display:flex;
+	flex-direction:column;
+	border-color:lightgray;
+	border-radius:25px;
+}
+
+.osl-tab {
+	display:flex;
+	justify-content:center;
+	align-content:center;
+	align-items:center;
+	flex-direction:column;
+	border-top-left-radius: 25px;
+	border-top-right-radius: 25px;
+	border-top:solid;
+	border-left:solid;
+	border-right:solid;
+	width:150px;
+	height:50px;
+	border-color:lightgray !important;
+	cursor:pointer;
+}
+
+.osl-tab-pad {
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+	width:100%;
+	height:50px;
+	border-bottom:solid;
+	border-color:lightgray;
+}
+
+.search-entry {
+	height:35px;
+	width:300px;
+	padding-left:10px;
+	margin-left:20px;
+	border-radius:20px;
+	border-color:lightgray;
+
+}
+
+.tab-strip {
+	display:flex;
+	width:100%;
+	flex-direction:row;
+	justify-content:center;
+}
+
+.tab-content {
+	display:flex;
+	flex-direction:column;
+	justify-content:flex-start;
+	align-items:center;
+	width:100%;
+	height:100%;
+	overflow-x: auto;
+}
+
+table {
+  text-align: left;
+  margin-top:15px;
+  position: relative;
+  border-collapse: collapse; 
+}
+
+th {
+	position:sticky;
+	top:0;
+	background-color:cadetblue;
+}
+
+tr{
+	height:35px;
+	cursor:pointer;
+}
+
+tr:hover{
+	background-color:lightblue !important;
+}
+
+.cman-table {
+	width: 98% !important;
+}
+
+.tr-hilight{
+	background-color:lightgray !important;
+
+}
+
+.popup {
+	border:solid;
+	border-radius:25px;
+	border-color:lightgray;
+	background-color:white;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.error-dialog{
+	width:400px;
+	height:350px;
+	display:flex;
+	flex-direction:column;
+	justify-content:space-between;
+	align-items:center;
+}
+
+.error-dialog div{
+	margin:15px;
+	text-align: center;
+}
+
+.bills-dialog{
+	width:540px;
+	height:640px;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+}
+
+.bills-dialog div{
+	text-align: center;
+}
+
+.button{
+	border-radius:25px;
+	border:solid;
+	border-color: lightgray;
+	width:150px;
+	height:40px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin-bottom:15px;
+	cursor:pointer;
+}
+
+.button:hover{
+	background-color:lightblue;
+	color:white;
+}
+
+.data-entry {
+	height:40px;
+	padding-left:5px;
+	border-color: lightgray;
+	border-radius:10px;
+}
+
+.cman-dialog{
+	width:400px;
+	height:250px;
+	display:flex;
+	flex-direction:column;
+	justify-content:space-around;
+	align-items:center;
+
+}
+
+.cman-selector{
+	margin-top:15px;
+
+	display:flex;
+	flex-direction:row;
+	justify-content:space-evenly;
+}
+
+.cman-selector select{
+	width:220px;
+	height:200px;
+}
+
+.cman-selector-control-strip{
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+
+	width:45px;
+}
+
+.bill-text{
+	display:flex;
+	flex-direction:column !important;
+	justify-content:center;
+}
+
+.text-entry{
+	height:220px;
+	width:500px;
+}
+
+.no-results{
+	display:flex;
+	justify-content:center;
+	width:100%;
+	height:100%;
+	flex-direction:column;
+	align-items:center
+}
+
+.modal-wall {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index:999;
+	background-color: rgba(0, 0, 0, 0.4);
+}
