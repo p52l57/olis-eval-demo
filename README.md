@@ -28,7 +28,7 @@ Click the "Legislators" tab and press the "Add Legislator" button to see the dia
 
 Note the legislator report with rudimentary filter.
 
-Click on the "Bills" table and click the "Add Bill" button to add a bill.
+Click on the "Bills" tab and click the "Add Bill" button to add a bill.
 
 Note the bills report.
 
