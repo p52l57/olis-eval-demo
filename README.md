@@ -24,7 +24,7 @@ How to setup the application:
 
 Navigate your browser to http://localhost:4200 to run the web application. 
 
-Click on the Legislator tab and click the "Legislators" tab and press the "Add Legislator" button to see the dialog to add a legislator.
+Click the "Legislators" tab and press the "Add Legislator" button to see the dialog to add a legislator.
 
 Note the legislator report with rudimentary filter.
 
